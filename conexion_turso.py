@@ -17,6 +17,7 @@ cursor.execute('''
                 ''')
 # julio estuvo aqui
 cursor.execute('''INSERT INTO prueba (col2, col3) VALUES ('valorPrueba1','valorPrueba2')''')
+# alba está probando
 conn.commit()
 conn.sync()
 
