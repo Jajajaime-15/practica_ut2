@@ -15,9 +15,10 @@ cursor.execute('''
                     col3 TEXT NOT NULL
                 )
                 ''')
-
+# julio estuvo aqui
 cursor.execute('''INSERT INTO prueba (col2, col3) VALUES ('valorPrueba1','valorPrueba2')''')
-cursor.commit()
-cursor.sync()
+conn.commit()
+conn.sync()
+
 
 conn.close()
