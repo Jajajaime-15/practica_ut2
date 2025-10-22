@@ -40,7 +40,7 @@ cursor.execute('''
                     FOREIGN KEY (id_editorial) REFERENCES editorial (id_editorial)
                 )
                 ''')
-
+cursor.execute("INSERT INTO ")
 conn.commit()
 conn.sync()
 conn.close()
