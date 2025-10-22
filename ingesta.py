@@ -11,21 +11,20 @@ cursor = conn.cursor()
 cursor.execute('''
                 CREATE TABLE IF NOT EXISTS editorial (
                     id_editorial INTEGER PRIMARY KEY,
-                    nombre TEXT
+                    nombre TEXT NOT NULL
                 )
                 ''')
 cursor.execute('''
                 CREATE TABLE IF NOT EXISTS genero (
                     id_genero INTEGER PRIMARY KEY,
-                    nombre TEXT
+                    nombre TEXT NOT NULL
                 )
                 ''')
 cursor.execute('''
                 CREATE TABLE IF NOT EXISTS autor (
                     id_autor INTEGER PRIMARY KEY,
-                    nombre TEXT,
-                    apellido TEXT,
-                    edad INTEGER
+                    nombre_completo TEXT NOT NULL,
+                    edad INTEGER NOT NULL
                 )
                 ''')
 cursor.execute('''
@@ -39,6 +38,24 @@ cursor.execute('''
                     FOREIGN KEY (id_genero) REFERENCES genero (id_genero), 
                     FOREIGN KEY (id_editorial) REFERENCES editorial (id_editorial)
                 )
+                ''')
+
+
+cursor.execute('''
+                INSERT INTO editorial VALUES ('Nova'), ('Egregius'), ('Dykinson'), ('Hidra'), ('RBA')
+                ''')
+cursor.execute('''
+                INSERT INTO autor (nombre, apellido, edad) 
+                VALUES ('Brandon','Sanderson','50'), ('Jaime','Ruiz','23'), ('Pierce','Brown','37'), 
+                    ('Rebecca','Kuang','30'), ('Vicente','Garrido','67')
+                ''')
+cursor.execute('''
+                INSERT INTO genero VALUES ('Fantasia'), ('Ciencia Ficcion'), ('Policiaca'), ('Ensayo'), ('Horror')
+                ''')
+cursor.execute('''
+                INSERT INTO libros (titulo, id_autor, id_genero, id_editorial, num_pags) 
+                VALUES ('El Camino de los Reyes',1,1,1,1100), ('Analisis de la discriminacion hacia la mujer en los videojuegos',2,4,3,25), 
+                (Juramentada',1,1,1,1300), ('Nacidos de la Bruma',1,1,1,650), ('La mujer en los videojuegos: desigualdad y discriminación',2,4,3,6)
                 ''')
 
 conn.commit()
