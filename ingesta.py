@@ -8,11 +8,13 @@ conn = libsql.connect("practicaut2",sync_url = db_url, auth_token = auth_token)
 
 cursor = conn.cursor()
 
+# Eliminamos las tablas cada vez que se realiza la ingesta, comenzando por libros para que no haya problemas con las FK
+cursor.execute('''DROP TABLE IF EXISTS libros''')
 cursor.execute('''DROP TABLE IF EXISTS editorial''')
 cursor.execute('''DROP TABLE IF EXISTS genero''')
 cursor.execute('''DROP TABLE IF EXISTS autor''')
-cursor.execute('''DROP TABLE IF EXISTS libros''')
 
+# Crearemos las tablas, siendo la ultima la de libros para poder realizar las referencias directamente al crear la tabla
 cursor.execute('''
                 CREATE TABLE IF NOT EXISTS editorial (
                     id_editorial INTEGER PRIMARY KEY,
@@ -32,20 +34,23 @@ cursor.execute('''
                     edad INTEGER NOT NULL
                 )
                 ''')
+# Queremos poder poner los libros sin referenciar ningun genero, ni editorial ni autor, en caso de que sean desconocidos
+# Ademas, asi podremos permitir el set null al borrar de las otras tablas, en vez de borrar el libro entero
+# La actualizacion si la haremos en cascada
 cursor.execute('''
                 CREATE TABLE IF NOT EXISTS libros (
                     titulo TEXT PRIMARY KEY,
-                    id_autor INTEGER NOT NULL,
-                    id_genero INTEGER NOT NULL,
-                    id_editorial INTEGER NOT NULL,
+                    id_autor INTEGER, 
+                    id_genero INTEGER,
+                    id_editorial INTEGER,
                     num_pags INTEGER NOT NULL,
-                    FOREIGN KEY (id_autor) REFERENCES autor (id_autor), 
-                    FOREIGN KEY (id_genero) REFERENCES genero (id_genero), 
-                    FOREIGN KEY (id_editorial) REFERENCES editorial (id_editorial)
+                    FOREIGN KEY (id_autor) REFERENCES autor (id_autor) ON DELETE SET NULL ON UPDATE CASCADE, 
+                    FOREIGN KEY (id_genero) REFERENCES genero (id_genero) ON DELETE SET NULL ON UPDATE CASCADE, 
+                    FOREIGN KEY (id_editorial) REFERENCES editorial (id_editorial) ON DELETE SET NULL ON UPDATE CASCADE
                 )
                 ''')
 
-
+# Realizamos las inserciones de datos para tener varios valores en las tablas nada mas realizar la ingesta
 cursor.execute('''
                 INSERT INTO editorial (nombre) VALUES ('Nova'), ('Egregius'), ('Dykinson'), ('Hidra'), ('RBA')
                 ''')
@@ -63,6 +68,7 @@ cursor.execute('''
                 ('Juramentada',1,1,1,1300), ('Nacidos de la Bruma',1,1,1,650), ('La mujer en los videojuegos: desigualdad y discriminación',2,4,3,6)
                 ''')
 
+# Validamos los cambios, los sincronizamos con turso y cerramos el conector
 conn.commit()
 conn.sync()
 conn.close()
