@@ -18,19 +18,19 @@ cursor.execute('''DROP TABLE IF EXISTS autor''')
 cursor.execute('''
                 CREATE TABLE IF NOT EXISTS editorial (
                     id_editorial INTEGER PRIMARY KEY,
-                    nombre TEXT NOT NULL
+                    nombre TEXT UNIQUE NOT NULL
                 )
                 ''')
 cursor.execute('''
                 CREATE TABLE IF NOT EXISTS genero (
                     id_genero INTEGER PRIMARY KEY,
-                    nombre TEXT NOT NULL
+                    nombre TEXT UNIQUE NOT NULL
                 )
                 ''')
 cursor.execute('''
                 CREATE TABLE IF NOT EXISTS autor (
                     id_autor INTEGER PRIMARY KEY,
-                    nombre_completo TEXT NOT NULL,
+                    nombre_completo TEXT UNIQUE NOT NULL,
                     edad INTEGER NOT NULL
                 )
                 ''')

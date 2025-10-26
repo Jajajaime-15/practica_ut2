@@ -15,14 +15,14 @@ def menuTablas():
     
     seleccion = input("¿Que tabla desea utilizar? ")
 
-    return seleccion
+    return seleccion.lower().strip()
 #Metodo menu acciones donde devolvemos la seleccion escrita por consola para usarla en el match
 def menuAcciones(): 
     print("------------")
     print("Acciones: Crear, Borrar, Mostrar Todos, Actualizar")
     seleccion = input("¿Que accion desea realizar? ")
 
-    return seleccion
+    return seleccion.lower().strip()
 
 tabla = menuTablas() #le asginamos el valor devuelto del metodo menutablas a tabla para usarlo en el match
 accion = menuAcciones() #le asginamos el valor devuelto del metodo menuAcciones a tabla para usarlo en el match
@@ -183,32 +183,32 @@ def MostrarTodosGeneros():
 
 
 match tabla:
-    case "Editorial":
+    case "editorial":
         match accion:
-            case "Crear":
+            case "crear":
                 nombre = input("Introduce el nombre de la editorial: ")
                 crearEditorial(nombre)
-            case "Mostrar todos":  
+            case "mostrar todos":  
                  MostrarTodosEditorial()
-            case "Borrar":
+            case "borrar":
                 id_editorial = input("Introduce el ID de la editorial que deseas borrar: ")
                 borrarEditorial(id_editorial)
-            case "Actualizar":
+            case "actualizar":
                 id_editorial = input("Introduce el ID de la editorial que deseas actualizar: ") 
                 nombre = input("Introduce el nuevo nombre de la editorial: ")
                 actualizarEditorial(id_editorial, nombre) 
                  
-    case "Libros":
+    case "libros":
         match accion:
-            case "Crear":
+            case "crear":
                 nombre = input("Introduce el nombre del libro: ")
                 crearLibro(nombre)
-            case "Mostrar todos":  
+            case "mostrar todos":  
                  MostrarTodosLibros()
-            case "Borrar":
+            case "borrar":
                 titulo = input("Introduce el titulo del libro que deseas borrar: ")
                 borrarLibro(titulo)
-            case "Actualizar":   
+            case "actualizar":   
                 titulo = input("Introduce el titulo del libro que deseas actualizar: ")
                 nuevo_titulo = input("Introduce el nuevo titulo del libro: ")
                 id_autor = input("Introduce el nuevo ID del autor: ")
@@ -217,46 +217,40 @@ match tabla:
                 paginas = input("Introduce el nuevo numero de paginas del libro: ")
                 actualizarEditorial(titulo,nuevo_titulo, id_autor, id_genero, id_editorial, paginas) 
 
-    case "Autor":
+    case "autor":
         match accion:
-            case "Crear":
+            case "crear":
                 nombre = input("Introduce el nombre del autor: ")
                 edad = input("Introduce la edad del autor: ")
                 crearAutor(nombre,edad)
-            case "Mostrar todos":  
+            case "mostrar todos":  
                  MostrarTodosAutores()
-            case "Borrar":
+            case "borrar":
                 id_autor = input("Introduce el ID del autor que deseas eliminar: ")
                 borrarAutor(id_autor)
-            case "Actualizar":
+            case "actualizar":
                 id_autor = input("Introduce el ID del autor que deseas actualizar: ") 
                 nombre = input("Introduce el nuevo nombre del autor: ")
                 edad = input("Introduce la nueva edad del autor: ")
                 actualizarAutor(id_autor, nombre, edad) 
 
-    case "Genero":
+    case "genero":
         match accion:
-            case "Crear":
+            case "crear":
                 nombre = input("Introduce el nombre del genero: ")
                 crearGenero(nombre)
-            case "Mostrar todos":  
+            case "mostrar todos":  
                  MostrarTodosGeneros()
-            case "Borrar":
+            case "borrar":
                 id_genero = input("Introduce el ID del genero que deseas eliminar: ")
                 borrarGenero(id_genero)
-            case "Actualizar":   
+            case "actualizar":   
                 id_genero = input("Introduce el ID del genero que deseas actualizar: ")
                 nombre = input("Introduce el nuevo nombre del genero: ")
                 actualizarGenero(id_genero, nombre)             
 
 
 
-
-
 conn.commit()
 conn.sync()
 conn.close()
-
-
-
-
