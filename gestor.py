@@ -30,7 +30,7 @@ accion = menu_acciones() #le asginamos el valor devuelto del metodo menu accione
 # COMIENZO DE METODOS DE BUSCAR IDS
 def buscar_id_autor(nombre):
     # buscamos el id del autor donde el nombre introducido coincida con el nombre en la tabla de autores
-    cursor.execute(''' SELECT id_autor FROM autor WHERE nombre = ?
+    cursor.execute(''' SELECT id_autor FROM autor WHERE nombre_completo = ?
                    ''', (nombre,))
     resultado = cursor.fetchone() # guardamos el resultado de la consulta en una variable
     if resultado: # comprobamos si hay resultado de la consulta y lo devolvemos
@@ -52,7 +52,7 @@ def buscar_id_genero (nombre):
 
 def buscar_id_editorial (nombre):
     # buscamos el id de la editorial donde el nombre introducido coincida con el nombre en la tabla de editorial
-    cursor.execute('''SELECT id_editoral FROM editorial WHERE nombre = ?
+    cursor.execute('''SELECT id_editorial FROM editorial WHERE nombre = ?
                    ''', (nombre,))
     resultado = cursor.fetchone() # guardamos el resultado de la consulta en una variable
     if resultado: # comprobamos si hay resultado de la consulta y lo devolvemos
@@ -129,33 +129,66 @@ def borrar_genero(id_genero): # eliminamos informacion de la tabla genero
 
 # COMIENZO DE METODOS DE CREAR
 def crear_editorial(nombre):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
-    cursor.execute('''
+    
+    id_editorial = buscar_id_editorial(nombre)
+    
+    if not id_editorial:
+            cursor.execute('''
                 INSERT INTO editorial (nombre) VALUES (?)
                     ''', (nombre,))
-    
-    conn.commit()
-
+            conn.commit()
+            print("Editorial creada correctamente") 
+    else: # si no se encuentra alguno indicamos que revise los datos
+            print("Editorial repetida")
 
 def crear_genero(nombre):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
-    cursor.execute('''
+    
+    id_genero = buscar_id_genero(nombre)
+    
+    if not id_genero:
+            cursor.execute('''
                 INSERT INTO genero (nombre) VALUES (?)
                     ''', (nombre,))
+            conn.commit()
+            print("Genero creado correctamente")
+    else: # si no se encuentra alguno indicamos que revise los datos
+        print("Genero repetido")
     
-    conn.commit()    
-
 def crear_autor(nombre, edad):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
-    cursor.execute('''
-                INSERT INTO autor (nombre_completo , edad) VALUES (?, ?)
-                    ''', (nombre,edad,))
     
-    conn.commit()        
+    id_autor = buscar_id_autor(nombre)
+    
+    if not id_autor:
+            cursor.execute('''
+                INSERT INTO autor (nombre_completo , edad) VALUES (?, ?)
+                    ''', (nombre,edad))
+            conn.commit()
+            print("Autor creado correctamente")            
+    else: # si no se encuentra alguno indicamos que revise los datos
+            print("Autor repetido")   
 
-def crear_libro(titulo, id_autor, id_genero, id_editorial, paginas):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
-    cursor.execute('''
-                INSERT INTO libros (nombre) VALUES (?)
-                    ''', (nombre,))
-    #HAY QUE TERMINARLO TODAVIA
-    conn.commit() 
+def crear_libro(titulo, nom_autor, nom_genero, nom_editorial, paginas):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
+    
+    cursor.execute('''SELECT titulo FROM libros WHERE titulo = ? 
+                  ''', (titulo,))#Buscamos  si el titulo esta repetido
+    resultado = cursor.fetchone() # guardamos el resultado de la consulta en una variable
+    if not resultado:
+
+    # buscamos los ids correspondientes al nombre que se introduce por teclado
+        id_autor = buscar_id_autor(nom_autor)
+        id_genero = buscar_id_genero(nom_genero)
+        id_editorial = buscar_id_editorial(nom_editorial)
+
+    # comprobamos que los id se encuentran
+    if id_editorial and id_autor and id_genero:
+        cursor.execute('''
+                INSERT INTO libros (titulo, id_autor, id_genero, id_editorial, num_pags ) VALUES (?, ?, ?, ?, ?)
+                       ''', (titulo, id_autor, id_genero, id_editorial, paginas))
+        conn.commit()
+        print("Libro creado correctamente")
+    else: # si no se encuentra alguno indicamos que revise los datos
+        print("Error al crear el libro, comprueba todos los campos.")
+
 # FIN DE METODOS DE CREAR
 
 # COMIENZO DE METODOS DE MOSTRAR TODOS
@@ -204,8 +237,12 @@ match tabla:
     case "libros":
         match accion:
             case "crear":
-                nombre = input("Introduce el nombre del libro: ")
-                crear_libro(nombre)
+                titulo = input("Introduce el titulo del libro que deseas crear: ")
+                nom_autor = input("Introduce el nombre del autor: ")
+                nom_genero = input("Introduce el nombre del genero: ")
+                nom_editorial = input("Introduce el nombre de la editorial: ")
+                paginas = input("Introduce el numero de paginas del libro: ")
+                crear_libro(titulo,nom_autor,nom_genero,nom_editorial,paginas)
             case "mostrar todos":  
                 mostrar_todos_libros()
             case "borrar":
