@@ -215,7 +215,7 @@ match tabla:
                 id_genero = input("Introduce el nuevo ID del genero: ")
                 id_editorial = input("Introduce el nuevo ID de la editorial: ")
                 paginas = input("Introduce el nuevo numero de paginas del libro: ")
-                actualizarEditorial(titulo,nuevo_titulo, id_autor, id_genero, id_editorial, paginas) 
+                actualizarLibro(titulo,nuevo_titulo, id_autor, id_genero, id_editorial, paginas) 
 
     case "autor":
         match accion:
