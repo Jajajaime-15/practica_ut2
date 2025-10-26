@@ -9,27 +9,26 @@ conn = libsql.connect("practicaut2",sync_url = db_url, auth_token = auth_token)
 cursor = conn.cursor()
 
 #Metodo menu tablas donde devolvemos la seleccion escrita por consola para usarla en el match
-def menuTablas(): 
+def menu_tablas(): 
     print("------------")
     print("Tablas: Libros, Editorial, Genero y Autor")
     
-    seleccion = input("¿Que tabla desea utilizar? ")
+    seleccion = input("¿Que tabla desea utilizar?\t")
 
     return seleccion.lower().strip()
 #Metodo menu acciones donde devolvemos la seleccion escrita por consola para usarla en el match
-def menuAcciones(): 
+def menu_acciones(): 
     print("------------")
     print("Acciones: Crear, Borrar, Mostrar Todos, Actualizar")
-    seleccion = input("¿Que accion desea realizar? ")
+    seleccion = input("¿Que accion desea realizar?\t")
 
     return seleccion.lower().strip()
 
-tabla = menuTablas() #le asginamos el valor devuelto del metodo menutablas a tabla para usarlo en el match
-accion = menuAcciones() #le asginamos el valor devuelto del metodo menuAcciones a tabla para usarlo en el match
+tabla = menu_tablas() #le asginamos el valor devuelto del metodo menu tablas a tabla para usarlo en el match
+accion = menu_acciones() #le asginamos el valor devuelto del metodo menu acciones a tabla para usarlo en el match
 
-# METODOS PARA BUSCAR POR NOMBRE LOS IDS
-
-def buscarId_autor(nombre):
+# COMIENZO DE METODOS DE BUSCAR IDS
+def buscar_id_autor(nombre):
     # buscamos el id del autor donde el nombre introducido coincida con el nombre en la tabla de autores
     cursor.execute(''' SELECT id_autor FROM autor WHERE nombre = ?
                    ''', (nombre,))
@@ -40,7 +39,7 @@ def buscarId_autor(nombre):
         print(f"Autor {nombre} no encontrado en la base de datos")
         return None
     
-def buscarId_genero (nombre):
+def buscar_id_genero (nombre):
     # buscamos el id del genero donde el nombre introducido coincida con el nombre en la tabla de genero
     cursor.execute('''SELECT id_genero FROM genero WHERE nombre = ?
                    ''', (nombre,))
@@ -51,7 +50,7 @@ def buscarId_genero (nombre):
         print(f"Genero {nombre} no encontrado en la base de datos")
         return None
 
-def buscarId_editorial (nombre):
+def buscar_id_editorial (nombre):
     # buscamos el id de la editorial donde el nombre introducido coincida con el nombre en la tabla de editorial
     cursor.execute('''SELECT id_editoral FROM editorial WHERE nombre = ?
                    ''', (nombre,))
@@ -61,23 +60,23 @@ def buscarId_editorial (nombre):
     else:
         print(f"Editorial {nombre} no encontrado en la base de datos")
         return None
+# FIN DE METODOS DE BUSCAR IDS
 
-# METODOS PARA ACTUALIZAR DATOS DE LAS TABLAS DE LA BBDD
-
-def actualizarEditorial (id_editorial,nombre): # actualizamos en la tabla editorial
+# COMIENZO DE METODOS DE ACTUALIZAR
+def actualizar_editorial (id_editorial,nombre): # actualizamos en la tabla editorial
     cursor.execute(''' UPDATE editorial SET nombre = ? WHERE id_editorial = ?
                    ''', (nombre, id_editorial))
     conn.commit()
     print("Editorial actualizada correctamente")
 
-def actualizarLibro (titulo, nuevo_titulo, id_autor, id_genero, id_editorial, paginas): # actualizamos en la tabla libro
+def actualizar_libro (titulo, nuevo_titulo, id_autor, id_genero, id_editorial, paginas): # actualizamos en la tabla libro
     if not nuevo_titulo:
         nuevo_titulo = titulo
 
     # buscamos los ids correspondientes al nombre que se introduce por teclado
-    id_autor = buscarId_autor(nombre)
-    id_genero = buscarId_genero(nombre)
-    id_editorial = buscarId_editorial(nombre)
+    id_autor = buscar_id_autor(nombre)
+    id_genero = buscar_id_genero(nombre)
+    id_editorial = buscar_id_editorial(nombre)
 
     # comprobamos que los id se encuentran
     if id_editorial and id_autor and id_genero:
@@ -88,47 +87,48 @@ def actualizarLibro (titulo, nuevo_titulo, id_autor, id_genero, id_editorial, pa
     else: # si no se encuentra alguno indicamos que revise los datos
         print("Error al actualizar el libro, comprueba todos los campos.")
 
-def actualizarAutor (id_autor, nombre, edad): # actualizamos en la tabla autor
+def actualizar_autor (id_autor, nombre, edad): # actualizamos en la tabla autor
     cursor.execute('''UPDATE autor SET nombre = ?, edad = ? WHERE id_autor = ?
                    ''', (nombre, edad, id_autor))
     conn.commit()
     print("Autor actualizado correctamente")
 
-def actualizarGenero(id_genero, nombre): # actualizamos en la tabla genero
+def actualizar_genero(id_genero, nombre): # actualizamos en la tabla genero
     cursor.execute('''
                    UPTDATE genero SET nombre = ? WHERE id_genero = ?
                    ''', (nombre, id_genero))
     conn.commit()
     print("Genero actualizado correctamente")
+# FIN DE METODOS DE ACTUALIZAR
 
-# METODOS PARA ELIMINAR DATOS DE LAS TABLAS DE LA BBDD
-
-def borrarEditorial(id_editorial): # eliminamos informacion de la tabla editorial 
+# COMIENZO DE METODOS DE BORRAR
+def borrar_editorial(id_editorial): # eliminamos informacion de la tabla editorial 
     cursor.execute('''DELETE FROM editorial WHERE id_editorial = ?
                    ''', (id_editorial,))
     conn.commit()
     print("Editorial borrada correctamente")
 
-def borrarLibro(titulo): # eliminamos informacion de la tabla libros
+def borrar_libro(titulo): # eliminamos informacion de la tabla libros
     cursor.execute('''DELETE FROM libros WHERE id_libro = ?
                    ''', (titulo,))
     conn.commit()
     print("Libro borrado correctamente")
 
-def borrarAutor(id_autor): # eliminamos informacion de la tabla autor
+def borrar_autor(id_autor): # eliminamos informacion de la tabla autor
     cursor.execute('''DELETE FROM autor WHERE id_autor = ?
                    ''', (id_autor,))
     conn.commit()
     print("Autor borrado correctamente")
 
-def borrarGenero(id_genero): # eliminamos informacion de la tabla genero
+def borrar_genero(id_genero): # eliminamos informacion de la tabla genero
     cursor.execute('''DELETE FROM genero WHERE id_genero = ?
                    ''', (id_genero,))
     conn.commit()
     print("Genero borrado correctamente")
+# FIN DE METODOS DE BORRAR
 
-
-def crearEditorial(nombre):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
+# COMIENZO DE METODOS DE CREAR
+def crear_editorial(nombre):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
     cursor.execute('''
                 INSERT INTO editorial (nombre) VALUES (?)
                     ''', (nombre,))
@@ -136,78 +136,81 @@ def crearEditorial(nombre):#Metodo donde insertamos en la base de datos los dato
     conn.commit()
 
 
-def crearGenero(nombre):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
+def crear_genero(nombre):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
     cursor.execute('''
                 INSERT INTO genero (nombre) VALUES (?)
                     ''', (nombre,))
     
     conn.commit()    
 
-def crearAutor(nombre, edad):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
+def crear_autor(nombre, edad):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
     cursor.execute('''
                 INSERT INTO autor (nombre_completo , edad) VALUES (?, ?)
                     ''', (nombre,edad,))
     
     conn.commit()        
 
-def crearLibro(titulo, id_autor, id_genero, id_editorial, paginas):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
+def crear_libro(titulo, id_autor, id_genero, id_editorial, paginas):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
     cursor.execute('''
                 INSERT INTO libros (nombre) VALUES (?)
                     ''', (nombre,))
     #HAY QUE TERMINARLO TODAVIA
-    conn.commit()            
+    conn.commit() 
+# FIN DE METODOS DE CREAR
 
-def MostrarTodosEditorial():
+# COMIENZO DE METODOS DE MOSTRAR TODOS
+def mostrar_todos_editorial():
     cursor.execute("Select * FROM editorial")
     resultados = cursor.fetchall()
     for fila in resultados:
         print(fila)
 
-def MostrarTodosLibros():
+def mostrar_todos_libros():
     cursor.execute("Select * FROM libros")
     resultados = cursor.fetchall()
     for fila in resultados:
         print(fila)     
 
-def MostrarTodosAutores():
+def mostrar_todos_autores():
     cursor.execute("Select * FROM autor")
     resultados = cursor.fetchall()
     for fila in resultados:
         print(fila)       
 
-def MostrarTodosGeneros():
+def mostrar_todos_generos():
     cursor.execute("Select * FROM genero")
     resultados = cursor.fetchall()
     for fila in resultados:
         print(fila)                    
-
+# FIN DE METODOS DE MOSTRAR TODOS
 
 match tabla:
     case "editorial":
         match accion:
             case "crear":
                 nombre = input("Introduce el nombre de la editorial: ")
-                crearEditorial(nombre)
+                crear_editorial(nombre)
             case "mostrar todos":  
-                 MostrarTodosEditorial()
+                mostrar_todos_editorial()
             case "borrar":
                 id_editorial = input("Introduce el ID de la editorial que deseas borrar: ")
-                borrarEditorial(id_editorial)
+                borrar_editorial(id_editorial)
             case "actualizar":
                 id_editorial = input("Introduce el ID de la editorial que deseas actualizar: ") 
                 nombre = input("Introduce el nuevo nombre de la editorial: ")
-                actualizarEditorial(id_editorial, nombre) 
-                 
+                actualizar_editorial(id_editorial, nombre) 
+            case _:
+                print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
     case "libros":
         match accion:
             case "crear":
                 nombre = input("Introduce el nombre del libro: ")
-                crearLibro(nombre)
+                crear_libro(nombre)
             case "mostrar todos":  
-                 MostrarTodosLibros()
+                mostrar_todos_libros()
             case "borrar":
                 titulo = input("Introduce el titulo del libro que deseas borrar: ")
-                borrarLibro(titulo)
+                borrar_libro(titulo)
             case "actualizar":   
                 titulo = input("Introduce el titulo del libro que deseas actualizar: ")
                 nuevo_titulo = input("Introduce el nuevo titulo del libro: ")
@@ -215,39 +218,45 @@ match tabla:
                 id_genero = input("Introduce el nuevo ID del genero: ")
                 id_editorial = input("Introduce el nuevo ID de la editorial: ")
                 paginas = input("Introduce el nuevo numero de paginas del libro: ")
-                actualizarLibro(titulo,nuevo_titulo, id_autor, id_genero, id_editorial, paginas) 
-
+                actualizar_libro(titulo,nuevo_titulo, id_autor, id_genero, id_editorial, paginas) 
+            case _:
+                print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
     case "autor":
         match accion:
             case "crear":
                 nombre = input("Introduce el nombre del autor: ")
                 edad = input("Introduce la edad del autor: ")
-                crearAutor(nombre,edad)
+                crear_autor(nombre,edad)
             case "mostrar todos":  
-                 MostrarTodosAutores()
+                mostrar_todos_autores()
             case "borrar":
                 id_autor = input("Introduce el ID del autor que deseas eliminar: ")
-                borrarAutor(id_autor)
+                borrar_autor(id_autor)
             case "actualizar":
                 id_autor = input("Introduce el ID del autor que deseas actualizar: ") 
                 nombre = input("Introduce el nuevo nombre del autor: ")
                 edad = input("Introduce la nueva edad del autor: ")
-                actualizarAutor(id_autor, nombre, edad) 
-
+                actualizar_autor(id_autor, nombre, edad)
+            case _:
+                print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
     case "genero":
         match accion:
             case "crear":
                 nombre = input("Introduce el nombre del genero: ")
-                crearGenero(nombre)
+                crear_genero(nombre)
             case "mostrar todos":  
-                 MostrarTodosGeneros()
+                mostrar_todos_generos()
             case "borrar":
                 id_genero = input("Introduce el ID del genero que deseas eliminar: ")
-                borrarGenero(id_genero)
+                borrar_genero(id_genero)
             case "actualizar":   
                 id_genero = input("Introduce el ID del genero que deseas actualizar: ")
                 nombre = input("Introduce el nuevo nombre del genero: ")
-                actualizarGenero(id_genero, nombre)             
+                actualizar_genero(id_genero, nombre) 
+            case _:
+                print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
+    case _:
+        print("Error. Selecciona una opcion valida [libros, editorial, autor, genero]")
 
 
 
