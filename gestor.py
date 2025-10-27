@@ -343,9 +343,10 @@ if __name__ == "__main__":
                     break
                 case _:
                     print("Error. Selecciona una opcion valida [libros, editorial, autor, genero, salir]")
-            conn.commit()
-            conn.sync()
+            conn.commit() # siempre que la operacion sea exitosa, completamos la transaccion
+            conn.sync() # sincronizamos con la base de datos de turso
     except Exception as e:
-        print("ERROR")
+        print("ERROR EN EL PROGRAMA", e) # comunicamos el error al usario
+        conn.rollback() # si ocurre algun error en el programa, siempre haremos un cancelaremos la transaccion
     finally:
-        conn.close()
+        conn.close() # cerramos siempre la conexion, pase lo que pase
