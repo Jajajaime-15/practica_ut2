@@ -81,18 +81,34 @@ def crear_libro(titulo, nom_autor, nom_genero, nom_editorial, paginas):# Metodo 
 # FIN DE METODOS DE CREAR
 
 # COMIENZO DE METODOS DE ACTUALIZAR
-def actualizar_editorial(id_editorial,nombre): # actualizamos en la tabla editorial
-    cursor.execute('''SELECT id_editorial FROM editorial WHERE nombre = ?''', (nombre,))
+def actualizar_editorial(): # actualizamos en la tabla editorial
+
+    nombre = input("Introduce el nombre de la editorial que deseas actualizar: ").lower()
+    nuevo_nombre = input("Introduce el nuevo nombre de la editorial: ").lower()
+
+    if not nuevo_nombre:
+        nuevo_nombre = nombre
+
+    cursor.execute('''SELECT id_editorial FROM editorial WHERE nombre = ?''', (nuevo_nombre, nombre))
     resultado = cursor.fetchone()
+
     if not resultado:
-        cursor.execute(''' UPDATE editorial SET nombre = ? WHERE id_editorial = ?
-                    ''', (nombre, id_editorial))
+        cursor.execute(''' UPDATE editorial SET nombre = ? WHERE nombre = ?
+                    ''', (nuevo_nombre,nombre))
         conn.commit()
         print("Editorial actualizada correctamente")
     else:
         print("ERROR. Ya existe una editorial con ese nombre.")
 
-def actualizar_libro(titulo, nuevo_titulo, nom_autor, nom_genero, nom_editorial, num_pags): # actualizamos en la tabla libro
+def actualizar_libro(): # actualizamos en la tabla libro
+
+    titulo = input("Introduce el titulo del libro que deseas actualizar: ").lower()
+    nuevo_titulo = input("Introduce el nuevo titulo del libro: ").lower()
+    nom_autor = input("Introduce el nombre del autor: ").lower()
+    nom_genero = input("Introduce el nombre del genero: ").lower()
+    nom_editorial = input("Introduce el nombre de la editorial: ").lower()
+    num_pags = input("Introduce el nuevo numero de paginas del libro: ")
+
     if not nuevo_titulo:
         nuevo_titulo = titulo
 
@@ -182,7 +198,6 @@ def borrar_genero(id_genero): # eliminamos informacion de la tabla genero
 
 # COMIENZO DE METODOS DE MOSTRAR TODOS
 def mostrar_todos_editorial():
-    # guardamos las consultas de mostrar toda la tabla en un objeto Python
     cursor.execute("SELECT * FROM editorial")
     resultados = cursor.fetchall()
     for fila in resultados:
@@ -249,104 +264,94 @@ if __name__ == "__main__":
 
     conn = libsql.connect("practicaut2",sync_url = db_url, auth_token = auth_token)
     cursor = conn.cursor()
-    try:
-        while True:
-            tabla = menu_tablas() # le asignamos el valor devuelto del metodo menu tablas para usarlo en el match
-            match tabla:
-                case "editorial":
-                    accion = menu_acciones() # le asignamos el valor devuelto del metodo menu acciones para usarlo en el match
-                    match accion:
-                        case "crear":
-                            nombre = input("Introduce el nombre de la editorial: ").lower()
-                            crear_editorial(nombre)
-                        case "mostrar todos":  
-                            mostrar_todos_editorial()
-                        case "borrar":
-                            id_editorial = input("Introduce el ID de la editorial que deseas borrar: ").lower()
-                            borrar_editorial(id_editorial)
-                        case "actualizar":
-                            id_editorial = input("Introduce el ID de la editorial que deseas actualizar: ").lower()
-                            nombre = input("Introduce el nuevo nombre de la editorial: ").lower()
-                            actualizar_editorial(id_editorial, nombre) 
-                        case "regresar":
-                            continue
-                        case _:
-                            print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
-                case "libros":
-                    accion = menu_acciones()
-                    match accion:
-                        case "crear":
-                            titulo = input("Introduce el titulo del libro que deseas crear: ").lower()
-                            nom_autor = input("Introduce el nombre del autor: ").lower()
-                            nom_genero = input("Introduce el nombre del genero: ").lower()
-                            nom_editorial = input("Introduce el nombre de la editorial: ").lower()
-                            paginas = input("Introduce el numero de paginas del libro: ")
-                            crear_libro(titulo,nom_autor,nom_genero,nom_editorial,paginas)
-                        case "mostrar todos":  
-                            mostrar_todos_libros()
-                        case "borrar":
-                            titulo = input("Introduce el titulo del libro que deseas borrar: ").lower()
-                            borrar_libro(titulo)
-                        case "actualizar":   
-                            titulo = input("Introduce el titulo del libro que deseas actualizar: ").lower()
-                            nuevo_titulo = input("Introduce el nuevo titulo del libro: ").lower()
-                            nom_autor = input("Introduce el nombre del autor: ").lower()
-                            nom_genero = input("Introduce el nombre del genero: ").lower()
-                            nom_editorial = input("Introduce el nombre de la editorial: ").lower()
-                            paginas = input("Introduce el nuevo numero de paginas del libro: ")
-                            actualizar_libro(titulo,nuevo_titulo, nom_autor, nom_genero, nom_editorial, paginas) 
-                        case "regresar":
-                            continue
-                        case _:
-                            print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
-                case "autor":
-                    accion = menu_acciones()
-                    match accion:
-                        case "crear":
-                            nombre = input("Introduce el nombre del autor: ").lower()
-                            edad = input("Introduce la edad del autor: ")
-                            crear_autor(nombre,edad)
-                        case "mostrar todos":  
-                            mostrar_todos_autores()
-                        case "borrar":
-                            id_autor = input("Introduce el ID del autor que deseas eliminar: ").lower()
-                            borrar_autor(id_autor)
-                        case "actualizar":
-                            id_autor = input("Introduce el ID del autor que deseas actualizar: ").lower()
-                            nombre = input("Introduce el nuevo nombre del autor: ").lower()
-                            edad = input("Introduce la nueva edad del autor: ")
-                            actualizar_autor(id_autor, nombre, edad)
-                        case "regresar":
-                            continue
-                        case _:
-                            print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
-                case "genero":
-                    accion = menu_acciones()
-                    match accion:
-                        case "crear":
-                            nombre = input("Introduce el nombre del genero: ").lower()
-                            crear_genero(nombre)
-                        case "mostrar todos":  
-                            mostrar_todos_generos()
-                        case "borrar":
-                            id_genero = input("Introduce el ID del genero que deseas eliminar: ").lower()
-                            borrar_genero(id_genero)
-                        case "actualizar":
-                            id_genero = input("Introduce el ID del genero que deseas actualizar: ").lower()
-                            nombre = input("Introduce el nuevo nombre del genero: ").lower()
-                            actualizar_genero(id_genero, nombre) 
-                        case "regresar":
-                            continue
-                        case _:
-                            print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar, regresar]")
-                case "salir":
-                    break
-                case _:
-                    print("Error. Selecciona una opcion valida [libros, editorial, autor, genero, salir]")
-            conn.commit() # siempre que la operacion sea exitosa, completamos la transaccion
-            conn.sync() # sincronizamos con la base de datos de turso
-    except Exception as e:
-        print("ERROR EN EL PROGRAMA", e) # comunicamos el error al usario
-        conn.rollback() # si ocurre algun error en el programa, siempre haremos un cancelaremos la transaccion
-    finally:
-        conn.close() # cerramos siempre la conexion, pase lo que pase
+
+    while True:
+        tabla = menu_tablas() # le asignamos el valor devuelto del metodo menu tablas para usarlo en el match
+        match tabla:
+            case "editorial":
+                accion = menu_acciones() # le asignamos el valor devuelto del metodo menu acciones para usarlo en el match
+                match accion:
+                    case "crear":
+                        nombre = input("Introduce el nombre de la editorial: ").lower()
+                        crear_editorial(nombre)
+                    case "mostrar todos":  
+                        mostrar_todos_editorial()
+                    case "borrar":
+                        id_editorial = input("Introduce el ID de la editorial que deseas borrar: ").lower()
+                        borrar_editorial(id_editorial)
+                    case "actualizar":
+                        actualizar_editorial() 
+                    case "regresar":
+                        continue
+                    case _:
+                        print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
+            case "libros":
+                accion = menu_acciones()
+                match accion:
+                    case "crear":
+                        titulo = input("Introduce el titulo del libro que deseas crear: ").lower()
+                        nom_autor = input("Introduce el nombre del autor: ").lower()
+                        nom_genero = input("Introduce el nombre del genero: ").lower()
+                        nom_editorial = input("Introduce el nombre de la editorial: ").lower()
+                        paginas = input("Introduce el numero de paginas del libro: ")
+                        crear_libro(titulo,nom_autor,nom_genero,nom_editorial,paginas)
+                    case "mostrar todos":  
+                        mostrar_todos_libros()
+                    case "borrar":
+                        titulo = input("Introduce el titulo del libro que deseas borrar: ").lower()
+                        borrar_libro(titulo)
+                    case "actualizar":   
+                        actualizar_libro() 
+                    case "regresar":
+                        continue
+                    case _:
+                        print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
+            case "autor":
+                accion = menu_acciones()
+                match accion:
+                    case "crear":
+                        nombre = input("Introduce el nombre del autor: ").lower()
+                        edad = input("Introduce la edad del autor: ")
+                        crear_autor(nombre,edad)
+                    case "mostrar todos":  
+                        mostrar_todos_autores()
+                    case "borrar":
+                        id_autor = input("Introduce el ID del autor que deseas eliminar: ").lower()
+                        borrar_autor(id_autor)
+                    case "actualizar":
+                        id_autor = input("Introduce el ID del autor que deseas actualizar: ").lower()
+                        nombre = input("Introduce el nuevo nombre del autor: ").lower()
+                        edad = input("Introduce la nueva edad del autor: ")
+                        actualizar_autor(id_autor, nombre, edad)
+                    case "regresar":
+                        continue
+                    case _:
+                        print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
+            case "genero":
+                accion = menu_acciones()
+                match accion:
+                    case "crear":
+                        nombre = input("Introduce el nombre del genero: ").lower()
+                        crear_genero(nombre)
+                    case "mostrar todos":  
+                        mostrar_todos_generos()
+                    case "borrar":
+                        id_genero = input("Introduce el ID del genero que deseas eliminar: ").lower()
+                        borrar_genero(id_genero)
+                    case "actualizar":
+                        id_genero = input("Introduce el ID del genero que deseas actualizar: ").lower()
+                        nombre = input("Introduce el nuevo nombre del genero: ").lower()
+                        actualizar_genero(id_genero, nombre) 
+                    case "regresar":
+                        continue
+                    case _:
+                        print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar, regresar]")
+            case "salir":
+                break
+            case _:
+                print("Error. Selecciona una opcion valida [libros, editorial, autor, genero, salir]")
+
+
+conn.commit()
+conn.sync()
+conn.close()
