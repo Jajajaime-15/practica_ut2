@@ -245,6 +245,7 @@ def borrar_genero(): # eliminamos informacion de la tabla genero
 
 # COMIENZO DE METODOS DE MOSTRAR TODOS
 def mostrar_todos_editorial():
+    # guardamos las consultas de mostrar toda la tabla en un objeto Python
     cursor.execute("SELECT nombre FROM editorial")
     resultados = cursor.fetchall()
     print("------------------")
@@ -383,77 +384,80 @@ if __name__ == "__main__":
     conn = libsql.connect("practicaut2",sync_url = db_url, auth_token = auth_token)
     cursor = conn.cursor()
 
-    while True:
-        tabla = menu_tablas() # le asignamos el valor devuelto del metodo menu tablas para usarlo en el match
-        match tabla:
-            case "editorial":
-                accion = menu_acciones() # le asignamos el valor devuelto del metodo menu acciones para usarlo en el match
-                match accion:
-                    case "crear":
-                        crear_editorial()
-                    case "mostrar todos":  
-                        mostrar_todos_editorial()
-                    case "borrar":
-                        borrar_editorial()
-                    case "actualizar":
-                        actualizar_editorial() 
-                    case "regresar":
-                        continue
-                    case _:
-                        print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
-            case "libros":
-                accion = menu_acciones()
-                match accion:
-                    case "crear":
-                        crear_libro()
-                    case "mostrar todos":  
-                        mostrar_todos_libros()
-                    case "borrar":
-                        borrar_libro()
-                    case "actualizar":   
-                        actualizar_libro() 
-                    case "regresar":
-                        continue
-                    case _:
-                        print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
-            case "autor":
-                accion = menu_acciones()
-                match accion:
-                    case "crear":
-                        crear_autor()
-                    case "mostrar todos":  
-                        mostrar_todos_autores()
-                    case "borrar":
-                        borrar_autor()
-                    case "actualizar":
-                        actualizar_autor()
-                    case "regresar":
-                        continue
-                    case _:
-                        print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
-            case "genero":
-                accion = menu_acciones()
-                match accion:
-                    case "crear":
-                        crear_genero()
-                    case "mostrar todos":  
-                        mostrar_todos_generos()
-                    case "borrar":
-                        borrar_genero()
-                    case "actualizar":
-                        actualizar_genero() 
-                    case "regresar":
-                        continue
-                    case _:
-                        print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar, regresar]")
-            case "otras consultas":
-                otras_consultas()
-            case "salir":
-                break
-            case _:
-                print("Error. Selecciona una opcion valida [libros, editorial, autor, genero, salir]")
-
-
-conn.commit()
-conn.sync()
-conn.close()
+    try:
+        while True:
+            tabla = menu_tablas() # le asignamos el valor devuelto del metodo menu tablas para usarlo en el match
+            match tabla:
+                case "editorial":
+                    accion = menu_acciones() # le asignamos el valor devuelto del metodo menu acciones para usarlo en el match
+                    match accion:
+                        case "crear":
+                            crear_editorial()
+                        case "mostrar todos":  
+                            mostrar_todos_editorial()
+                        case "borrar":
+                            borrar_editorial()
+                        case "actualizar":
+                            actualizar_editorial() 
+                        case "regresar":
+                            continue
+                        case _:
+                            print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
+                case "libros":
+                    accion = menu_acciones()
+                    match accion:
+                        case "crear":
+                            crear_libro()
+                        case "mostrar todos":  
+                            mostrar_todos_libros()
+                        case "borrar":
+                            borrar_libro()
+                        case "actualizar":   
+                            actualizar_libro() 
+                        case "regresar":
+                            continue
+                        case _:
+                            print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
+                case "autor":
+                    accion = menu_acciones()
+                    match accion:
+                        case "crear":
+                            crear_autor()
+                        case "mostrar todos":  
+                            mostrar_todos_autores()
+                        case "borrar":
+                            borrar_autor()
+                        case "actualizar":
+                            actualizar_autor()
+                        case "regresar":
+                            continue
+                        case _:
+                            print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar]")
+                case "genero":
+                    accion = menu_acciones()
+                    match accion:
+                        case "crear":
+                            crear_genero()
+                        case "mostrar todos":  
+                            mostrar_todos_generos()
+                        case "borrar":
+                            borrar_genero()
+                        case "actualizar":
+                            actualizar_genero() 
+                        case "regresar":
+                            continue
+                        case _:
+                            print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar, regresar]")
+                case "otras consultas":
+                    otras_consultas()
+                case "salir":
+                    break
+                case _:
+                    print("Error. Selecciona una opcion valida [libros, editorial, autor, genero, salir]")
+            conn.commit() # siempre que la operacion sea exitosa, completamos la transaccion
+            conn.sync() # sincronizamos con la base de datos de turso
+    except Exception as e:
+        print("ERROR EN EL PROGRAMA", e) # comunicamos el error al usario
+        conn.rollback() # si ocurre algun error en el programa, siempre haremos un cancelaremos la transaccion
+    finally:
+        conn.close() # cerramos siempre la conexion, pase lo que pase
