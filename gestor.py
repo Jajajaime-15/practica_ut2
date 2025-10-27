@@ -19,7 +19,9 @@ def menu_acciones():
     return seleccion.lower().strip()
 
 # COMIENZO DE METODOS DE CREAR
-def crear_editorial(nombre):#Metodo donde insertamos en la base de datos los datos necesarios en editorial
+def crear_editorial():#Metodo donde insertamos en la base de datos los datos necesarios en editorial
+    nombre = input("Introduce el nombre de la editorial: ").lower()
+
     id_editorial = buscar_id_editorial(nombre)
     
     if not id_editorial:
@@ -31,7 +33,8 @@ def crear_editorial(nombre):#Metodo donde insertamos en la base de datos los dat
     else: # si no se encuentra alguno indicamos que revise los datos
         print("Editorial repetida")
 
-def crear_genero(nombre):#Metodo donde insertamos en la base de datos los datos necesarios en genero
+def crear_genero():#Metodo donde insertamos en la base de datos los datos necesarios en genero
+    nombre = input("Introduce el nombre del genero: ").lower()
     id_genero = buscar_id_genero(nombre)
     
     if not id_genero:
@@ -43,7 +46,9 @@ def crear_genero(nombre):#Metodo donde insertamos en la base de datos los datos 
     else: # si no se encuentra alguno indicamos que revise los datos
         print("Genero repetido")
     
-def crear_autor(nombre, edad):#Metodo donde insertamos en la base de datos los datos necesarios en autor
+def crear_autor():#Metodo donde insertamos en la base de datos los datos necesarios en autor
+    nombre = input("Introduce el nombre del autor: ").lower()
+    edad = input("Introduce la edad del autor: ")
     id_autor = buscar_id_autor(nombre)
     
     if not id_autor:
@@ -55,7 +60,13 @@ def crear_autor(nombre, edad):#Metodo donde insertamos en la base de datos los d
     else: # si no se encuentra alguno indicamos que revise los datos
         print("Autor repetido")   
 
-def crear_libro(titulo, nom_autor, nom_genero, nom_editorial, paginas):# Metodo donde insertamos en la base de datos los datos necesarios en libro
+def crear_libro():# Metodo donde insertamos en la base de datos los datos necesarios en libro
+    titulo = input("Introduce el titulo del libro que deseas crear: ").lower()
+    nom_autor = input("Introduce el nombre del autor: ").lower()
+    nom_genero = input("Introduce el nombre del genero: ").lower()
+    nom_editorial = input("Introduce el nombre de la editorial: ").lower()
+    paginas = input("Introduce el numero de paginas del libro: ")
+    
     cursor.execute('''SELECT titulo FROM libros WHERE titulo = ? 
                   ''', (titulo,))#Buscamos  si el titulo esta repetido
     resultado = cursor.fetchone() # guardamos el resultado de la consulta en una variable
@@ -303,8 +314,7 @@ if __name__ == "__main__":
                 accion = menu_acciones() # le asignamos el valor devuelto del metodo menu acciones para usarlo en el match
                 match accion:
                     case "crear":
-                        nombre = input("Introduce el nombre de la editorial: ").lower()
-                        crear_editorial(nombre)
+                        crear_editorial()
                     case "mostrar todos":  
                         mostrar_todos_editorial()
                     case "borrar":
@@ -319,12 +329,7 @@ if __name__ == "__main__":
                 accion = menu_acciones()
                 match accion:
                     case "crear":
-                        titulo = input("Introduce el titulo del libro que deseas crear: ").lower()
-                        nom_autor = input("Introduce el nombre del autor: ").lower()
-                        nom_genero = input("Introduce el nombre del genero: ").lower()
-                        nom_editorial = input("Introduce el nombre de la editorial: ").lower()
-                        paginas = input("Introduce el numero de paginas del libro: ")
-                        crear_libro(titulo,nom_autor,nom_genero,nom_editorial,paginas)
+                        crear_libro()
                     case "mostrar todos":  
                         mostrar_todos_libros()
                     case "borrar":
@@ -339,9 +344,7 @@ if __name__ == "__main__":
                 accion = menu_acciones()
                 match accion:
                     case "crear":
-                        nombre = input("Introduce el nombre del autor: ").lower()
-                        edad = input("Introduce la edad del autor: ")
-                        crear_autor(nombre,edad)
+                        crear_autor()
                     case "mostrar todos":  
                         mostrar_todos_autores()
                     case "borrar":
@@ -356,8 +359,7 @@ if __name__ == "__main__":
                 accion = menu_acciones()
                 match accion:
                     case "crear":
-                        nombre = input("Introduce el nombre del genero: ").lower()
-                        crear_genero(nombre)
+                        crear_genero()
                     case "mostrar todos":  
                         mostrar_todos_generos()
                     case "borrar":
