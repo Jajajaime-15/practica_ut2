@@ -19,12 +19,13 @@ def menu_acciones():
     return seleccion.lower().strip()
 
 # COMIENZO DE METODOS DE CREAR
-def crear_editorial():#Metodo donde insertamos en la base de datos los datos necesarios en editorial
+def crear_editorial(): # metodo donde insertamos en la base de datos los datos necesarios en editorial
     nombre = input("Introduce el nombre de la editorial: ").lower()
 
-    id_editorial = buscar_id_editorial(nombre)
-    
-    if not id_editorial:
+    cursor.execute('''SELECT * FROM editorial WHERE nombre = ?''', (nombre,))
+    resultado = cursor.fetchone()
+
+    if not resultado:
         cursor.execute('''
             INSERT INTO editorial (nombre) VALUES (?)
                 ''', (nombre,))
@@ -35,9 +36,11 @@ def crear_editorial():#Metodo donde insertamos en la base de datos los datos nec
 
 def crear_genero():#Metodo donde insertamos en la base de datos los datos necesarios en genero
     nombre = input("Introduce el nombre del genero: ").lower()
-    id_genero = buscar_id_genero(nombre)
+
+    cursor.execute('''SELECT * FROM genero WHERE nombre = ?''', (nombre,))
+    resultado = cursor.fetchone()
     
-    if not id_genero:
+    if not resultado:
         cursor.execute('''
             INSERT INTO genero (nombre) VALUES (?)
                 ''', (nombre,))
@@ -49,9 +52,11 @@ def crear_genero():#Metodo donde insertamos en la base de datos los datos necesa
 def crear_autor():#Metodo donde insertamos en la base de datos los datos necesarios en autor
     nombre = input("Introduce el nombre del autor: ").lower()
     edad = input("Introduce la edad del autor: ")
-    id_autor = buscar_id_autor(nombre)
     
-    if not id_autor:
+    cursor.execute('''SELECT * FROM autor WHERE nombre = ?''', (nombre,))
+    resultado = cursor.fetchone()
+    
+    if not resultado:
         cursor.execute('''
             INSERT INTO autor (nombre_completo , edad) VALUES (?, ?)
                 ''', (nombre,edad))
