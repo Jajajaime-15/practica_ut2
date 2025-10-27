@@ -92,7 +92,7 @@ def actualizar_editorial(id_editorial,nombre): # actualizamos en la tabla editor
     else:
         print("ERROR. Ya existe una editorial con ese nombre.")
 
-def actualizar_libro(titulo, nuevo_titulo, nom_autor, nomr_genero, nom_editorial, num_pags): # actualizamos en la tabla libro
+def actualizar_libro(titulo, nuevo_titulo, nom_autor, nom_genero, nom_editorial, num_pags): # actualizamos en la tabla libro
     if not nuevo_titulo:
         nuevo_titulo = titulo
 
