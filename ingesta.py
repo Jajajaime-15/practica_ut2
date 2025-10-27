@@ -52,20 +52,20 @@ cursor.execute('''
 
 # Realizamos las inserciones de datos para tener varios valores en las tablas nada mas realizar la ingesta
 cursor.execute('''
-                INSERT INTO editorial (nombre) VALUES ('Nova'), ('Egregius'), ('Dykinson'), ('Hidra'), ('RBA')
+                INSERT INTO editorial (nombre) VALUES ('nova'), ('egregius'), ('dykinson'), ('hidra'), ('rba')
                 ''')
 cursor.execute('''
                 INSERT INTO autor (nombre_completo, edad) 
-                VALUES ('Brandon Sanderson','50'), ('Jaime Ruiz','23'), ('Pierce Brown','37'), 
-                    ('Rebecca Kuang','30'), ('Vicente Garrido','67')
+                VALUES ('brandon sanderson','50'), ('jaime ruiz','23'), ('pierce brown','37'), 
+                    ('rebecca kuang','30'), ('vicente garrido','67')
                 ''')
 cursor.execute('''
-                INSERT INTO genero(nombre) VALUES ('Fantasia'), ('Ciencia Ficcion'), ('Policiaca'), ('Ensayo'), ('Horror')
+                INSERT INTO genero(nombre) VALUES ('fantasia'), ('ciencia ficcion'), ('policiaca'), ('ensayo'), ('horror')
                 ''')
 cursor.execute('''
                 INSERT INTO libros (titulo, id_autor, id_genero, id_editorial, num_pags) 
-                VALUES ('El Camino de los Reyes',1,1,1,1100), ('Analisis de la discriminacion hacia la mujer en los videojuegos',2,4,3,25), 
-                ('Juramentada',1,1,1,1300), ('Nacidos de la Bruma',1,1,1,650), ('La mujer en los videojuegos: desigualdad y discriminación',2,4,3,6)
+                VALUES ('el cmino de los reyes',1,1,1,1100), ('analisis de la discriminacion hacia la mujer en los videojuegos',2,4,3,25), 
+                ('juramentada',1,1,1,1300), ('nacidos de la bruma',1,1,1,650), ('la mujer en los videojuegos: desigualdad y discriminación',2,4,3,6)
                 ''')
 
 # Validamos los cambios, los sincronizamos con turso y cerramos el conector
