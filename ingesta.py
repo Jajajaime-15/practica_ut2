@@ -64,7 +64,7 @@ cursor.execute('''
                 ''')
 cursor.execute('''
                 INSERT INTO libros (titulo, id_autor, id_genero, id_editorial, num_pags) 
-                VALUES ('el cmino de los reyes',1,1,1,1100), ('analisis de la discriminacion hacia la mujer en los videojuegos',2,4,3,25), 
+                VALUES ('el camino de los reyes',1,1,1,1100), ('analisis de la discriminacion hacia la mujer en los videojuegos',2,4,3,25), 
                 ('juramentada',1,1,1,1300), ('nacidos de la bruma',1,1,1,650), ('la mujer en los videojuegos: desigualdad y discriminación',2,4,3,6)
                 ''')
 
