@@ -82,67 +82,102 @@ def crear_libro(titulo, nom_autor, nom_genero, nom_editorial, paginas):# Metodo 
 
 # COMIENZO DE METODOS DE ACTUALIZAR
 def actualizar_editorial(id_editorial,nombre): # actualizamos en la tabla editorial
-    cursor.execute(''' UPDATE editorial SET nombre = ? WHERE id_editorial = ?
-                   ''', (nombre, id_editorial))
-    conn.commit()
-    print("Editorial actualizada correctamente")
+    cursor.execute('''SELECT id_editorial FROM editorial WHERE nombre = ?''', (nombre,))
+    resultado = cursor.fetchone()
+    if not resultado:
+        cursor.execute(''' UPDATE editorial SET nombre = ? WHERE id_editorial = ?
+                    ''', (nombre, id_editorial))
+        conn.commit()
+        print("Editorial actualizada correctamente")
+    else:
+        print("ERROR. Ya existe una editorial con ese nombre.")
 
-def actualizar_libro(titulo, nuevo_titulo, id_autor, id_genero, id_editorial, paginas): # actualizamos en la tabla libro
+def actualizar_libro(titulo, nuevo_titulo, nom_autor, nomr_genero, nom_editorial, num_pags): # actualizamos en la tabla libro
     if not nuevo_titulo:
         nuevo_titulo = titulo
 
     # buscamos los ids correspondientes al nombre que se introduce por teclado
-    id_autor = buscar_id_autor(nombre)
-    id_genero = buscar_id_genero(nombre)
-    id_editorial = buscar_id_editorial(nombre)
+    id_autor = buscar_id_autor(nom_autor)
+    id_genero = buscar_id_genero(nom_genero)
+    id_editorial = buscar_id_editorial(nom_editorial)
 
     # comprobamos que los id se encuentran
     if id_editorial and id_autor and id_genero:
-        cursor.execute(''' UPDATE libros SET titulo = ?, id_autor = ?, id_genero = ?, id_editorial = ?, paginas = ? WHERE titulo = ?
-                    ''', (nuevo_titulo, id_autor, id_genero, id_editorial, paginas, titulo))
+        cursor.execute(''' UPDATE libros SET titulo = ?, id_autor = ?, id_genero = ?, id_editorial = ?, num_pags = ? WHERE titulo = ?
+                    ''', (nuevo_titulo, id_autor, id_genero, id_editorial, num_pags, titulo))
         conn.commit()
         print("Libro actualizado correctamente")
     else: # si no se encuentra alguno indicamos que revise los datos
         print("Error al actualizar el libro, comprueba todos los campos.")
 
 def actualizar_autor(id_autor, nombre, edad): # actualizamos en la tabla autor
-    cursor.execute('''UPDATE autor SET nombre = ?, edad = ? WHERE id_autor = ?
-                   ''', (nombre, edad, id_autor))
-    conn.commit()
-    print("Autor actualizado correctamente")
+    cursor.execute('''SELECT id_autor FROM autor WHERE nombre = ?''', (nombre,))
+    resultado = cursor.fetchone()
+    if not resultado:
+        cursor.execute('''UPDATE autor SET nombre = ?, edad = ? WHERE id_autor = ?
+                    ''', (nombre, edad, id_autor))
+        conn.commit()
+        print("Autor actualizado correctamente")
+    else:
+        print("ERROR. Ya existe un autor con ese nombre.")
 
 def actualizar_genero(id_genero, nombre): # actualizamos en la tabla genero
-    cursor.execute('''
-                   UPDATE genero SET nombre = ? WHERE id_genero = ?
-                   ''', (nombre, id_genero))
-    conn.commit()
-    print("Genero actualizado correctamente")
+    cursor.execute('''SELECT id_genero FROM genero WHERE nombre = ?''', (nombre,))
+    resultado = cursor.fetchone()
+    if not resultado:
+        cursor.execute('''
+                    UPDATE genero SET nombre = ? WHERE id_genero = ?
+                    ''', (nombre, id_genero))
+        conn.commit()
+        print("Genero actualizado correctamente")
+    else:
+        print("ERROR. Ya existe un genero con ese nombre.")
 # FIN DE METODOS DE ACTUALIZAR
 
 # COMIENZO DE METODOS DE BORRAR
 def borrar_editorial(id_editorial): # eliminamos informacion de la tabla editorial 
-    cursor.execute('''DELETE FROM editorial WHERE id_editorial = ?
-                   ''', (id_editorial,))
-    conn.commit()
-    print("Editorial borrada correctamente")
+    cursor.execute('''SELECT * FROM editorial WHERE id_editorial = ?''', (id_editorial,))
+    resultado = cursor.fetchone()
+    if resultado:
+        cursor.execute('''DELETE FROM editorial WHERE id_editorial = ?
+                    ''', (id_editorial,))
+        conn.commit()
+        print("Editorial borrada correctamente")
+    else:
+        print("ERROR. No hay ninguna editorial con ese ID.")
 
 def borrar_libro(titulo): # eliminamos informacion de la tabla libros
-    cursor.execute('''DELETE FROM libros WHERE id_libro = ?
-                   ''', (titulo,))
-    conn.commit()
-    print("Libro borrado correctamente")
+    cursor.execute('''SELECT * FROM libros WHERE titulo = ?''', (titulo,))
+    resultado = cursor.fetchone()
+    if resultado:
+        cursor.execute('''DELETE FROM libros WHERE id_libro = ?
+                    ''', (titulo,))
+        conn.commit()
+        print("Libro borrado correctamente")
+    else:
+        print("ERROR. No existe ningun libro con este titulo.")
 
 def borrar_autor(id_autor): # eliminamos informacion de la tabla autor
-    cursor.execute('''DELETE FROM autor WHERE id_autor = ?
-                   ''', (id_autor,))
-    conn.commit()
-    print("Autor borrado correctamente")
+    cursor.execute('''SELECT * FROM autor WHERE id_autor = ?''', (id_autor,))
+    resultado = cursor.fetchone()
+    if resultado:
+        cursor.execute('''DELETE FROM autor WHERE id_autor = ?
+                    ''', (id_autor,))
+        conn.commit()
+        print("Autor borrado correctamente")
+    else:
+        print("ERROR. No existe ningun autor con ese ID.")
 
 def borrar_genero(id_genero): # eliminamos informacion de la tabla genero
-    cursor.execute('''DELETE FROM genero WHERE id_genero = ?
-                   ''', (id_genero,))
-    conn.commit()
-    print("Genero borrado correctamente")
+    cursor.execute('''SELECT * FROM genero WHERE id_genero = ?''', (id_genero,))
+    resultado = cursor.fetchone()
+    if resultado:
+        cursor.execute('''DELETE FROM genero WHERE id_genero = ?
+                    ''', (id_genero,))
+        conn.commit()
+        print("Genero borrado correctamente")
+    else:
+        print("ERROR. No existe ningun genero con ese ID.")
 # FIN DE METODOS DE BORRAR
 
 # COMIENZO DE METODOS DE MOSTRAR TODOS
