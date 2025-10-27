@@ -4,7 +4,7 @@ import libsql # type: ignore
 #Metodo menu tablas donde devolvemos la seleccion escrita por consola para usarla en el match
 def menu_tablas(): 
     print("------------")
-    print("Tablas: Libros, Editorial, Genero y Autor")
+    print("Tablas: Libros, Editorial, Genero, Autor, Otras Consultas")
     print("Si desea salir del programa introduce [salir]")
     seleccion = input("¿Que tabla desea utilizar?\t")
 
@@ -321,6 +321,60 @@ def buscar_id_editorial(nombre):
         return None
 # FIN DE METODOS DE BUSCAR IDS
 
+# menu para las consultas predefinidas
+def menu_otras_consultas():
+    print("------------")
+    print("Consultas: ")
+    print("1.AUTORES ORDENADOS POR EDAD")
+    print("2.LIBROS DE AUTORES MENORES DE 30 ANYOS")
+    print("3.EDITORIAL CON MAS LIBROS DE UN GENERO EN CONCRETO Y SU GENERO")
+    print("4.AUTOR CON MAS LIBROS ESCRITOS")
+    print("5.GENEROS ORDENADOS POR NUMERO DE LIBROS REGISTRADOS DE MAYOR A MENOR")
+    print("[Introduce el numero]")
+    seleccion = input("¿Que consulta desea realizar?\t")
+    print("------------")
+
+    return seleccion.lower().strip()
+
+# metodo que permitira realizar algunas de las consultas con algo mas de complejidad planificadas por los desarrolladores
+def otras_consultas():
+    eleccion = menu_otras_consultas()
+    resultados = ""
+    match eleccion:
+        case "1":
+            cursor.execute("SELECT nombre_completo, edad FROM autor ORDER BY edad DESC")
+            resultados = cursor.fetchall()
+        case "2":
+            cursor.execute('''SELECT titulo, nombre_completo, edad 
+                           FROM libros INNER JOIN autor ON autor.id_autor = libros.id_autor WHERE edad < 30''')
+            resultados = cursor.fetchall()
+        case "3":
+            cursor.execute('''SELECT editorial.nombre, genero.nombre 
+                           FROM libros 
+                           INNER JOIN editorial ON editorial.id_editorial = libros.id_editorial
+                           INNER JOIN genero ON genero.id_genero = libros.id_genero
+                           GROUP BY genero.nombre
+                           ORDER BY COUNT(genero.nombre) DESC
+                           LIMIT 1''')
+            resultados = cursor.fetchall()
+        case "4":
+            cursor.execute('''SELECT nombre_completo 
+                           FROM libros 
+                           INNER JOIN autor ON autor.id_autor = libros.id_autor 
+                           GROUP BY nombre_completo 
+                           ORDER BY COUNT(titulo) DESC LIMIT 1''')
+            resultados = cursor.fetchall()
+        case "5":
+            cursor.execute('''SELECT nombre 
+                           FROM libros 
+                           INNER JOIN genero ON genero.id_genero = libros.id_genero 
+                           GROUP BY nombre
+                           ORDER BY COUNT(titulo) DESC''')
+            resultados = cursor.fetchall()
+        case _:
+            print("Opcion no valida")
+    for fila in resultados:
+        print(fila)
 
 if __name__ == "__main__":
     db_url = envyte.get("DB_URL")
@@ -392,6 +446,8 @@ if __name__ == "__main__":
                         continue
                     case _:
                         print("Error. Selecciona una opcion valida [crear, mostrar todos, borrar, actualizar, regresar]")
+            case "otras consultas":
+                otras_consultas()
             case "salir":
                 break
             case _:
