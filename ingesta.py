@@ -1,4 +1,4 @@
-import envyte # type: ignore
+import envyte # type: ignore este comentario nos sirve para que el IDE deje de avisarnos de que existe un error con la importacion (al no detectar que esta instalado en un entorno)
 import libsql # type: ignore
 
 db_url = envyte.get("DB_URL")

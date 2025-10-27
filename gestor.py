@@ -295,7 +295,7 @@ if __name__ == "__main__":
                     case "borrar":
                         id_genero = input("Introduce el ID del genero que deseas eliminar: ").lower()
                         borrar_genero(id_genero)
-                    case "actualizar":   
+                    case "actualizar":
                         id_genero = input("Introduce el ID del genero que deseas actualizar: ").lower()
                         nombre = input("Introduce el nuevo nombre del genero: ").lower()
                         actualizar_genero(id_genero, nombre) 
