@@ -52,7 +52,7 @@ def crear_genero():#Metodo donde insertamos en la base de datos los datos necesa
 def crear_autor():#Metodo donde insertamos en la base de datos los datos necesarios en autor
     nombre = input("Introduce el nombre del autor: ").lower()
     edad = input("Introduce la edad del autor: ")
-    
+
     cursor.execute('''SELECT * FROM autor WHERE nombre = ?''', (nombre,))
     resultado = cursor.fetchone()
     
@@ -245,26 +245,43 @@ def borrar_genero(): # eliminamos informacion de la tabla genero
 
 # COMIENZO DE METODOS DE MOSTRAR TODOS
 def mostrar_todos_editorial():
-    cursor.execute("SELECT * FROM editorial")
+    cursor.execute("SELECT nombre FROM editorial")
     resultados = cursor.fetchall()
+    print("------------------")
+    print("|Nombre Editorial|")
+    print("------------------")
     for fila in resultados:
         print(fila)
 
 def mostrar_todos_libros():
-    cursor.execute("SELECT * FROM libros")
+    # realizamos una consulta compleja para que el usuario visualice los nombres en vez de los ids
+    cursor.execute('''SELECT titulo, nombre_completo, genero.nombre, editorial.nombre
+                   FROM libros 
+                   INNER JOIN autor ON autor.id_autor = libros.id_autor
+                   INNER JOIN genero ON genero.id_genero = libros.id_genero
+                   INNER JOIN editorial ON editorial.id_editorial = libros.id_editorial;''')
     resultados = cursor.fetchall()
+    print("----------------------------------")
+    print("|Titulo||Autor||Genero||Editorial|")
+    print("----------------------------------")
     for fila in resultados:
         print(fila)     
 
 def mostrar_todos_autores():
-    cursor.execute("SELECT * FROM autor")
+    cursor.execute("SELECT nombre_completo, edad FROM autor")
     resultados = cursor.fetchall()
+    print("--------------------")
+    print("|Nombre Autor||Edad|")
+    print("--------------------")
     for fila in resultados:
         print(fila)       
 
 def mostrar_todos_generos():
-    cursor.execute("SELECT * FROM genero")
+    cursor.execute("SELECT nombre FROM genero")
     resultados = cursor.fetchall()
+    print("---------------")
+    print("|Nombre Genero|")
+    print("---------------")
     for fila in resultados:
         print(fila)                    
 # FIN DE METODOS DE MOSTRAR TODOS
