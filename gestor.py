@@ -126,24 +126,41 @@ def actualizar_libro(): # actualizamos en la tabla libro
     else: # si no se encuentra alguno indicamos que revise los datos
         print("Error al actualizar el libro, comprueba todos los campos.")
 
-def actualizar_autor(id_autor, nombre, edad): # actualizamos en la tabla autor
-    cursor.execute('''SELECT id_autor FROM autor WHERE nombre = ?''', (nombre,))
+def actualizar_autor(): # actualizamos en la tabla autor
+
+    nombre_completo = input("Introduce el nombre del autor que deseas actualizar: ").lower()
+    nuevo_nombre = input("Introduce el nuevo nombre del autor: ").lower()
+    edad = input("Introduce la nueva edad del autor: ")
+
+    if not nuevo_nombre:
+        nuevo_nombre=nombre_completo
+
+    cursor.execute('''SELECT id_autor FROM autor WHERE nombre_completo = ?''', (nuevo_nombre, edad, nombre_completo))
     resultado = cursor.fetchone()
+
     if not resultado:
-        cursor.execute('''UPDATE autor SET nombre = ?, edad = ? WHERE id_autor = ?
-                    ''', (nombre, edad, id_autor))
+        cursor.execute('''UPDATE autor SET nombre_completo = ?, edad = ? WHERE nombre_completo = ?
+                    ''', (nuevo_nombre, edad, nombre_completo))
         conn.commit()
         print("Autor actualizado correctamente")
     else:
         print("ERROR. Ya existe un autor con ese nombre.")
 
-def actualizar_genero(id_genero, nombre): # actualizamos en la tabla genero
-    cursor.execute('''SELECT id_genero FROM genero WHERE nombre = ?''', (nombre,))
+def actualizar_genero(): # actualizamos en la tabla genero
+
+    nombre = input("Introduce el nombre del genero que deseas actualizar: ").lower()
+    nuevo_nombre = input("Introduce el nuevo nombre del genero: ").lower()
+
+    if not nuevo_nombre:
+        nuevo_nombre=nombre
+
+    cursor.execute('''SELECT id_genero FROM genero WHERE nombre = ?''', (nuevo_nombre,nombre))
     resultado = cursor.fetchone()
+
     if not resultado:
         cursor.execute('''
-                    UPDATE genero SET nombre = ? WHERE id_genero = ?
-                    ''', (nombre, id_genero))
+                    UPDATE genero SET nombre = ? WHERE nombre = ?
+                    ''', (nuevo_nombre,nombre))
         conn.commit()
         print("Genero actualizado correctamente")
     else:
@@ -151,49 +168,63 @@ def actualizar_genero(id_genero, nombre): # actualizamos en la tabla genero
 # FIN DE METODOS DE ACTUALIZAR
 
 # COMIENZO DE METODOS DE BORRAR
-def borrar_editorial(id_editorial): # eliminamos informacion de la tabla editorial 
-    cursor.execute('''SELECT * FROM editorial WHERE id_editorial = ?''', (id_editorial,))
+def borrar_editorial(): # eliminamos informacion de la tabla editorial 
+
+    nombre = input("Introduce el nombre de la editorial que deseas borrar: ").lower()
+
+    cursor.execute('''SELECT * FROM editorial WHERE nombre = ?''', (nombre,))
     resultado = cursor.fetchone()
+
     if resultado:
-        cursor.execute('''DELETE FROM editorial WHERE id_editorial = ?
-                    ''', (id_editorial,))
+        cursor.execute('''DELETE FROM editorial WHERE nombre = ?
+                    ''', (nombre,))
         conn.commit()
         print("Editorial borrada correctamente")
     else:
-        print("ERROR. No hay ninguna editorial con ese ID.")
+        print("ERROR. No hay ninguna editorial con ese nombre.")
 
-def borrar_libro(titulo): # eliminamos informacion de la tabla libros
+def borrar_libro(): # eliminamos informacion de la tabla libros
+    
+    titulo = input("Introduce el titulo del libro que deseas borrar: ").lower()
+
     cursor.execute('''SELECT * FROM libros WHERE titulo = ?''', (titulo,))
     resultado = cursor.fetchone()
+
     if resultado:
-        cursor.execute('''DELETE FROM libros WHERE id_libro = ?
+        cursor.execute('''DELETE FROM libros WHERE titulo = ?
                     ''', (titulo,))
         conn.commit()
         print("Libro borrado correctamente")
     else:
         print("ERROR. No existe ningun libro con este titulo.")
 
-def borrar_autor(id_autor): # eliminamos informacion de la tabla autor
-    cursor.execute('''SELECT * FROM autor WHERE id_autor = ?''', (id_autor,))
+def borrar_autor(): # eliminamos informacion de la tabla autor
+
+    nombre = input("Introduce el nombre del autor que deseas eliminar: ").lower()
+
+    cursor.execute('''SELECT * FROM autor WHERE nombre_completo = ?''', (nombre,))
     resultado = cursor.fetchone()
+
     if resultado:
-        cursor.execute('''DELETE FROM autor WHERE id_autor = ?
-                    ''', (id_autor,))
+        cursor.execute('''DELETE FROM autor WHERE nombre_completo = ?
+                    ''', (nombre,))
         conn.commit()
         print("Autor borrado correctamente")
     else:
-        print("ERROR. No existe ningun autor con ese ID.")
+        print("ERROR. No existe ningun autor con ese nombre.")
 
-def borrar_genero(id_genero): # eliminamos informacion de la tabla genero
-    cursor.execute('''SELECT * FROM genero WHERE id_genero = ?''', (id_genero,))
+def borrar_genero(): # eliminamos informacion de la tabla genero
+
+    nombre = input("Introduce el nombre del genero que deseas eliminar: ").lower()
+    cursor.execute('''SELECT * FROM genero WHERE nombre = ?''', (nombre,))
     resultado = cursor.fetchone()
     if resultado:
-        cursor.execute('''DELETE FROM genero WHERE id_genero = ?
-                    ''', (id_genero,))
+        cursor.execute('''DELETE FROM genero WHERE nombre = ?
+                    ''', (nombre,))
         conn.commit()
         print("Genero borrado correctamente")
     else:
-        print("ERROR. No existe ningun genero con ese ID.")
+        print("ERROR. No existe ningun genero con ese nombre.")
 # FIN DE METODOS DE BORRAR
 
 # COMIENZO DE METODOS DE MOSTRAR TODOS
@@ -277,8 +308,7 @@ if __name__ == "__main__":
                     case "mostrar todos":  
                         mostrar_todos_editorial()
                     case "borrar":
-                        id_editorial = input("Introduce el ID de la editorial que deseas borrar: ").lower()
-                        borrar_editorial(id_editorial)
+                        borrar_editorial()
                     case "actualizar":
                         actualizar_editorial() 
                     case "regresar":
@@ -298,8 +328,7 @@ if __name__ == "__main__":
                     case "mostrar todos":  
                         mostrar_todos_libros()
                     case "borrar":
-                        titulo = input("Introduce el titulo del libro que deseas borrar: ").lower()
-                        borrar_libro(titulo)
+                        borrar_libro()
                     case "actualizar":   
                         actualizar_libro() 
                     case "regresar":
@@ -316,13 +345,9 @@ if __name__ == "__main__":
                     case "mostrar todos":  
                         mostrar_todos_autores()
                     case "borrar":
-                        id_autor = input("Introduce el ID del autor que deseas eliminar: ").lower()
-                        borrar_autor(id_autor)
+                        borrar_autor()
                     case "actualizar":
-                        id_autor = input("Introduce el ID del autor que deseas actualizar: ").lower()
-                        nombre = input("Introduce el nuevo nombre del autor: ").lower()
-                        edad = input("Introduce la nueva edad del autor: ")
-                        actualizar_autor(id_autor, nombre, edad)
+                        actualizar_autor()
                     case "regresar":
                         continue
                     case _:
@@ -336,12 +361,9 @@ if __name__ == "__main__":
                     case "mostrar todos":  
                         mostrar_todos_generos()
                     case "borrar":
-                        id_genero = input("Introduce el ID del genero que deseas eliminar: ").lower()
-                        borrar_genero(id_genero)
+                        borrar_genero()
                     case "actualizar":
-                        id_genero = input("Introduce el ID del genero que deseas actualizar: ").lower()
-                        nombre = input("Introduce el nuevo nombre del genero: ").lower()
-                        actualizar_genero(id_genero, nombre) 
+                        actualizar_genero() 
                     case "regresar":
                         continue
                     case _:
