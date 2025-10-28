@@ -31,7 +31,7 @@ cursor.execute('''
                 CREATE TABLE IF NOT EXISTS autor (
                     id_autor INTEGER PRIMARY KEY,
                     nombre_completo TEXT UNIQUE NOT NULL,
-                    edad INTEGER NOT NULL
+                    edad INTEGER
                 )
                 ''')
 # Queremos poder poner los libros sin referenciar ningun genero, ni editorial ni autor, en caso de que sean desconocidos
