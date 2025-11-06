@@ -332,6 +332,7 @@ def menu_otras_consultas():
     print("4.AUTOR CON MAS LIBROS ESCRITOS")
     print("5.GENEROS ORDENADOS POR NUMERO DE LIBROS REGISTRADOS DE MAYOR A MENOR")
     print("[Introduce el numero]")
+    print("Si desea regresar al menu de tablas introduce [regresar]")
     seleccion = input("¿Que consulta desea realizar?\t")
     print("------------")
 
@@ -372,6 +373,8 @@ def otras_consultas():
                            GROUP BY nombre
                            ORDER BY COUNT(titulo) DESC''')
             resultados = cursor.fetchall()
+        case "regresar":
+            pass
         case _:
             print("Opcion no valida")
     for fila in resultados:
