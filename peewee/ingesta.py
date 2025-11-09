@@ -11,8 +11,8 @@ from repositories.libros_repo import LibrosRepository
 
 db.execute_sql("PRAGMA foreign_keys = ON;")
 
-db.drop_tables([Libros], [Editorial], [Genero], [Autor], safe= True)
-db.create_tables([Editorial], [Genero], [Autor], [Libros], safe= True)
+db.drop_tables([Libros, Editorial, Genero, Autor], safe= True)
+db.create_tables([Editorial, Genero, Autor, Libros], safe= True)
 
 
 editorial = []
