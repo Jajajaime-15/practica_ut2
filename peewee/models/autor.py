@@ -1,6 +1,6 @@
 from peewee import * # type: ignore
 from database import db
-from base_model import BaseModel
+from models.base_model import BaseModel
 
 class Autor(BaseModel):
     id_autor = AutoField()
