@@ -26,4 +26,20 @@ class LibrosRepository:
     @staticmethod
     def consulta_todos():
         for l in Libros.select():
-            logger.info(f"titulo={l.titulo}, n_paginas={l.n_paginas}, id_editorial={l.id_editorial}, id_genero={l.id_genero}, id_autor={l.id_autor}")
+            
+            if l.id_editorial:
+                editorial = l.id_editorial.nombre
+            else:
+                editorial = "Sin editorial"
+
+            if l.id_genero:
+                genero = l.id_genero.nombre
+            else:
+                genero = "Sin genero"
+            
+            if l.id_autor:
+                autor = l.id_autor.nombre
+            else:
+                autor = "Sin autor"
+
+            logger.info(f"titulo={l.titulo}, n_paginas={l.n_paginas}, editorial={editorial}, genero={genero}, autor={autor}")

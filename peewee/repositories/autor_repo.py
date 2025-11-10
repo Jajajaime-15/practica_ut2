@@ -21,3 +21,9 @@ class AutorRepository:
     def consulta_todos():
         for a in Autor.select():
             logger.info(f"id={a.id_autor}, nombre={a.nombre}, edad={a.edad}")
+
+
+    @staticmethod
+    def actualizar_autor(antiguo, nuevo):
+        query = Autor.update(nombre = nuevo).where(Autor.nombre == antiguo)
+        query.execute()

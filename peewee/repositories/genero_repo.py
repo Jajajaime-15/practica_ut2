@@ -20,3 +20,8 @@ class GeneroRepository:
     def consulta_todos():
         for g in Genero.select():
             logger.info(f"id={g.id_genero}, nombre={g.nombre}")
+
+    @staticmethod
+    def actualizar_genero(antiguo, nuevo):
+        query = Genero.update(nombre = nuevo).where(Genero.nombre == antiguo)
+        query.execute()
