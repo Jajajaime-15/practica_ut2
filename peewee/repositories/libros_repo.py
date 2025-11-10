@@ -43,3 +43,17 @@ class LibrosRepository:
                 autor = "Sin autor"
 
             logger.info(f"titulo={l.titulo}, n_paginas={l.n_paginas}, editorial={editorial}, genero={genero}, autor={autor}")
+
+    @staticmethod
+    def actualizar_libro(antiguo, nuevo):
+        query = Libros.update(titulo = nuevo).where(Libros.titulo == antiguo)
+        query.execute()
+
+    @staticmethod
+    def eliminar_libro(nombre):
+        try:
+            libro = Libros.get(Libros.titulo == nombre)
+            libro.delete_instance() # tambien se puede hacer Libros.delete_instance(autor)
+            logger.info("Libro borrado correctamente")
+        except Libros.DoesNotExist:
+            logger.info("No se ha encontrado ningun libro con ese nombre")

@@ -28,9 +28,10 @@ class EditorialRepository:
 
     @staticmethod
     def eliminar_editorial(nombre):
-        a = Editorial.select(Editorial.id_editorial).where(Editorial.nombre == nombre)
-        #b = Libros.get(Editorial.id_editorial == a.id_editorial)
-
-        #Libros.delete().where(Libros.id_editorial == a).execute()
-
-        #Editorial.delete().where(Editorial.nombre == nombre).execute()
+        try:
+            editorial = Editorial.get(Editorial.nombre == nombre)
+            Libros.update(id_editorial=None).where(Libros.id_editorial == editorial).execute()
+            editorial.delete_instance() # tambien se puede hacer Editorial.delete_instance(editorial)
+            logger.info("Editorial borrada correctamente")
+        except Editorial.DoesNotExist:
+            logger.info("No se ha encontrado ninguna editorial con ese nombre")

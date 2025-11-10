@@ -17,8 +17,8 @@ db.create_tables([Editorial, Genero, Autor, Libros], safe= True)
 editorial = [('nova',), ('egregius',), ('dykinson',), ('hidra',), ('rba',)]
 genero = [('fantasia',), ('ciencia ficcion',), ('policiaca',), ('ensayo',), ('horror',)]
 autor = [('brandon sanderson',50), ('jaime ruiz',23), ('pierce brown',37), ('rebecca kuang',30), ('vicente garrido',67)]
-libros = [('el camino de los reyes',1100,1,1,1), ('analisis de la discriminacion hacia la mujer en los videojuegos',25,2,4,3), 
-('juramentada',1300,1,1,1), ('nacidos de la bruma',650,1,1,1), ('la mujer en los videojuegos: desigualdad y discriminación',6,2,4,3)]
+libros = [('el camino de los reyes',1100,1,1,1), ('analisis de la discriminacion hacia la mujer en los videojuegos',25,2,4,2), 
+('juramentada',1300,1,1,1), ('nacidos de la bruma',650,1,1,1), ('la mujer en los videojuegos: desigualdad y discriminación',6,2,4,2)]
 
 logger.info(f'Tablas tiradas y recreadas. Iniciando inserción múltiple de {len(editorial)} filas')
 EditorialRepository.ingesta_multiple(editorial)
