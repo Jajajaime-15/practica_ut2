@@ -1,5 +1,5 @@
 from models.editorial import Editorial
-from database import db
+from database import db, logger
 
 class EditorialRepository:
     @staticmethod
@@ -17,4 +17,5 @@ class EditorialRepository:
     
     @staticmethod
     def consulta_todos():
-        return Editorial.select()
+        for e in Editorial.select():
+            logger.info(f"id={e.id_editorial}, nombre={e.nombre}")

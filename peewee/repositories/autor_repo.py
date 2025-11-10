@@ -1,5 +1,5 @@
 from models.autor import Autor
-from database import db
+from database import db, logger
 
 class AutorRepository:
     @staticmethod
@@ -19,4 +19,5 @@ class AutorRepository:
 
     @staticmethod
     def consulta_todos():
-        return Autor.select()
+        for a in Autor.select():
+            logger.info(f"id={a.id_autor}, nombre={a.nombre}, edad={a.edad}")

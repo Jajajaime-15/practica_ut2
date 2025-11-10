@@ -1,5 +1,5 @@
 from models.libros import Libros
-from database import db
+from database import db, logger
 
 class LibrosRepository:
     @staticmethod
@@ -25,4 +25,5 @@ class LibrosRepository:
 
     @staticmethod
     def consulta_todos():
-        return Libros.select()
+        for l in Libros.select():
+            logger.info(f"titulo={l.titulo}, n_paginas={l.n_paginas}, id_editorial={l.id_editorial}, id_genero={l.id_genero}, id_autor={l.id_autor}")

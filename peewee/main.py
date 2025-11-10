@@ -1,4 +1,5 @@
 from peewee import * # type: ignore
+from database import db, logger
 from models.libros import Libros
 from models.editorial import Editorial
 from models.genero import Genero
@@ -10,6 +11,10 @@ from repositories.libros_repo import LibrosRepository
 
 def main():
     EditorialRepository.consulta_todos()
+    GeneroRepository.consulta_todos()
+    AutorRepository.consulta_todos()
+    LibrosRepository.consulta_todos()
+
 
 
 if __name__ == '__main__':

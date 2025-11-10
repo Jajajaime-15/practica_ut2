@@ -1,5 +1,5 @@
 from models.genero import Genero
-from database import db
+from database import db, logger
 
 class GeneroRepository:
     @staticmethod
@@ -18,4 +18,5 @@ class GeneroRepository:
 
     @staticmethod
     def consulta_todos():
-        return Genero.select()
+        for g in Genero.select():
+            logger.info(f"id={g.id_genero}, nombre={g.nombre}")
