@@ -14,4 +14,4 @@ if not DB_PATH.exists():
 else:
     logger.info(f"Conectando con la base de datos {DB_PATH}")
 
-db = SqliteDatabase(DB_PATH)
+db = SqliteDatabase(DB_PATH) #, pragmas={'foreign_keys': 1} #no se si esto funciona y se puede anyadir, segun la documentacion esto arregla los on delete
