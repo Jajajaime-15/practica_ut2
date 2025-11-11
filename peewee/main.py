@@ -42,7 +42,9 @@ def consultas():
     query1 = Autor.select(Autor.nombre, Autor.edad).order_by(Autor.edad.desc())
     for autor in query1.dicts():
         logger.info(autor)
-    
+
+    logger.info("---------")
+
     query2 = Libros.select(Libros.titulo, Autor.nombre.alias('autor'), Autor.edad).join(Autor).where(Autor.edad < 30)
     for libro in query2.dicts():
         logger.info(libro)
@@ -58,6 +60,18 @@ def consultas():
               .group_by(Genero.nombre).order_by(fn.COUNT(Genero.nombre).desc()).limit(1))
     for editorial in query3.dicts():
         logger.info(editorial)
+
+    logger.info("---------")
+
+    query4 = Libros.select(Autor.nombre, fn.COUNT(Libros.titulo).alias('libros')).join(Autor).group_by(Autor.nombre).order_by(fn.COUNT(Libros.titulo).desc()).limit(1)
+    for aut in query4.dicts():
+        logger.info(aut)
+    
+    logger.info("---------")
+
+    query5 = Libros.select(Genero.nombre, fn.COUNT(Libros.titulo).alias('libros')).join(Genero).group_by(Genero.nombre).order_by(fn.COUNT(Libros.titulo).desc())
+    for genero in query5.dicts():
+        logger.info(genero)
 
 def main():
     #db.execute_sql("PRAGMA foreign_keys = ON;") #funciona con esto tmb pero cuidado porque a veces va raro
